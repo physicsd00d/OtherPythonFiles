@@ -1,3 +1,30 @@
+#!/usr/bin/python
+
+import sys
+import os.path
+
+print 'Number of arguments:', len(sys.argv), 'arguments.'
+print 'Argument List:', str(sys.argv)
+
+if len(sys.argv) != 4:
+    print "   Error: need exactly three arguments after file name"
+    print "          fileToFilterOn fileToPrune outputFile"
+    sys.exit()
+
+# Unpack inputs
+fileToFilterOn  = sys.argv[1]
+fileToPrune     = sys.argv[2]
+outputFile      = sys.argv[3]
+
+# Check that inputs exist
+if not os.path.isfile(fileToFilterOn):
+    print "   Error: {0} does not exist".format(fileToFilterOn)
+    sys.exit()
+elif not os.path.isfile(fileToPrune):
+    print "   Error: {0} does not exist".format(fileToPrune)
+    sys.exit()
+
+
 from TRX_functions import readTRXIntoDictByCallsign
 from TRX_functions import pruneTRXFromList
 
@@ -5,9 +32,9 @@ from TRX_functions import pruneTRXFromList
 # fileToPrune     = 'TRX_Files/TRX_20050824_FastForward_OnTheMinute'
 # outputFile      = 'TRX_20050824_FastForward_OnTheMinute_Filtered'
 
-fileToFilterOn  = 'Kevin2018/ColoradoAircraftFilter'
-fileToPrune     = 'Kevin2018/TRX_TAF_PlannedTestFull'
-outputFile      = 'TempTRX'
+# fileToFilterOn  = 'Kevin2018/ColoradoAircraftFilter'
+# fileToPrune     = 'Kevin2018/TRX_TAF_PlannedTestFull'
+# outputFile      = 'TempTRX'
 
 # Just load the entire TRX, since it's been filtered, it should be relatively small
 TRX_Storage = readTRXIntoDictByCallsign(fileToFilterOn)
@@ -22,6 +49,10 @@ bigFilterKeys       = []
 filterDict = {'callsigns' : flightsToKeep, 'sectorNames' : [], 'filterDepAirports' : filterDepAirports,
               'filterTimes' : filterTimes, 'bigFilterKeys' : bigFilterKeys}
 pruneTRXFromList(fileToPrune, filterDict, outputFile)
+
+
+sys.exit()
+
 
 '''
 # Now that you've eliminated all the extra flights, make sure things are clean by
