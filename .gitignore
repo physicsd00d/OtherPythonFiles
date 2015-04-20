@@ -1,2 +1,16 @@
+# I think these belong in gitignore
 **/*.pyc
+
+# I suspect these do not belong here
 .idea/**
+**/.DS_STORE
+
+# It's probably insecure to use gitignore for these, but i will do it for now
+#  because I'm lazy and there are no collaborators to mess this up
+ProcessTAF/InputFiles/**
+ProcessTAF/OutputFiles/**
+
+ProcessTRX/Filters/**
+ProcessTRX/InputTRX/**
+ProcessTRX/OutputTRX/**
+ProcessTRX/KMLs/**
