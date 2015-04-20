@@ -207,8 +207,8 @@ def pruneTRXFromList(inFileName, filterDict, outFileName, deltaSeconds = 0):
                         shouldPrint = shouldPrint or (key[8] in set(sectorNames))   # Another chance to be true
 
                     # modifiedSign = key[1] + '_' + suffixList[fileCounter]
-                    if (key[1] == 'EJM626'):
-                        print 'DEBUG {0}, shouldPrint {1}'.format(key[1], shouldPrint)
+                    # if (key[1] == 'EJM626'):
+                    #     print 'DEBUG {0}, shouldPrint {1}'.format(key[1], shouldPrint)
 
                     curTrackLine = line
 
@@ -252,6 +252,8 @@ def pruneTRXFromList(inFileName, filterDict, outFileName, deltaSeconds = 0):
                     print "pruneTRXFromList: NewLine! This should not have been hit!"
                     print key
 
+        inputFile.close() # It's likely that the output file will be the same file, so make sure to close this first.
+
     except:
         print "pruneTRXFromList: FAILURE in reading the file"
         printOkay = 0
@@ -268,6 +270,7 @@ def pruneTRXFromList(inFileName, filterDict, outFileName, deltaSeconds = 0):
                 outFile.write('TRACK_TIME ' + key + '\n')
                 outFile.write(TRX_Storage[key])
 
+        outFile.close()
         # except:
         #     print "FAIL
     return TRX_Storage
