@@ -2,6 +2,7 @@
 ==== This file parses a Terminal Area Forecase file (.csv) and turns it into a TRX ===
 * Up front you'll find the function defs
 * The latter half of the file is a script that uses the functions
+* I'm just gonna leave this as a dirty script since it's rarely used.
 
 Author: Thomas J Colvin
 '''
@@ -13,21 +14,21 @@ import re
 
 
 # These are the only parameters you need to change for this script to run
-flightPlanFolder = 'Forecast_AirTraffic_2018_2025/'
+flightPlanFolder = 'InputFiles/'
+outputFolder = 'OutputFiles/'
+
+
+# flightPlanCsv = 'OUT_constrained_schedules_20120504_2018.csv'
+# TrxName = 'TRX_TAF2018'
+
+flightPlanCsv = 'OUT_constrained_schedules_20120504_2025.csv'
+TrxName = 'TRX_TAF2025'
+
+midnight = datetime(2012, 5, 4, 0, 1, 0)  # This gets used to throw out a few flights that are rolling over from the previous day
 
 
 # flightPlanCsv = 'abridgedFlightPlan.csv'
-flightPlanCsv = 'OUT_constrained_schedules_20120504_2018.csv'
-midnight = datetime(2012, 5, 4, 0, 1, 0)
-
-
-outputFolder = 'OutputFiles/'
-# outputFolder = '/Volumes/Storage/OldDocuments/Research/FACE2/Sandbox/'
-
-
-
-# TrxName = 'TRX_Falcon9_March_1_2013_Airtop'
-TrxName = 'TRX_TAF_PlannedTest'
+# TrxName = 'TRX_Falcon9_March_1_2013_Airtop'  # Why was this here?  Can this function parse Airtop files?
 
 
 

@@ -1,6 +1,9 @@
 
 ft2m = 0.3048
 
+'''
+Simply reads in a TRX and stores it as a dictionary.
+'''
 def readTRXIntoDictByCallsign(inFileName):
     # Starts by eliminating every single aircraft (shouldPrint = False), but if an AC matches a filter,
     #   then it will be allowed through.
@@ -277,10 +280,6 @@ def pruneTRXFromList(inFileName, filterDict, outFileName, deltaSeconds = 0):
 
 
 
-
-
-
-
 '''
 NOTE: This function only cares about callsign, so it's not very robust.  Either fix or don't use.
 
@@ -392,3 +391,4 @@ def RemoveTrackUpdates(inFileName,outFileName):
         except:
             print "FAILURE in writing the file"
 
+    return
