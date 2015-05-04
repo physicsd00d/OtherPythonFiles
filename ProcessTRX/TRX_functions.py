@@ -1,5 +1,30 @@
+import numpy as np
 
 ft2m = 0.3048
+
+def convertDegreesToDegMinSec(val):
+    Deg = int(np.floor(val))
+    Min = int((val - Deg)*60.)
+    Sec = int((val - Deg - Min/60.)*3600.)
+    return [Deg, Min, Sec]
+
+def convertDegMinSecStringToDegrees(val):
+    if ('.' in val) or ('-' in val):
+        print '# This cannot accomodate decimals in the seconds or negative signs.'
+        raise RuntimeError
+
+    Seconds      = float(val[-2:])
+    Minutes      = float(val[-4:-2])
+    if len(val) == 6:
+        Degrees  = float(val[:2])
+    elif len(val) == 7:
+        Degrees  = float(val[:3])
+    else:
+        print "BAD LONGITUDE FORMAT: {0}".format(val)
+        raise RuntimeError
+
+    return Degrees + Minutes/60. + Seconds/3600.
+
 
 '''
 Simply reads in a TRX and stores it as a dictionary.

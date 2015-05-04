@@ -10,7 +10,7 @@ CURR_AVOIDANCE_RTE      = 3
 '''
 Read in my custom FACET output file
 '''
-def readCustomFacetFile(facetFileName):
+def readCustomFacetFile(facetFileName, getSector = False):
     # //curr_ac->avoidance_status
     # //enum {
     # //    UNCHECKED_AVOIDANCE_RTE = 1,
@@ -117,25 +117,26 @@ def readCustomFacetFile(facetFileName):
         curFlag = int(curLine['isRerouted'])
         curAC['isRerouted'].add(curFlag)
 
-        # If this is the first time we've seen this sector, initialize its dictionary entry
-        sectorKey = curLine['sector']
-        if not sectorDict.has_key(sectorKey):
-            sectorDict[sectorKey] = {'timeList' : [], 'ACList' : []}
+        if getSector:
+            # If this is the first time we've seen this sector, initialize its dictionary entry
+            sectorKey = curLine['sector']
+            if not sectorDict.has_key(sectorKey):
+                sectorDict[sectorKey] = {'timeList' : [], 'ACList' : []}
 
-        # Pull down the current sector
-        curSector = sectorDict[sectorKey]
+            # Pull down the current sector
+            curSector = sectorDict[sectorKey]
 
-        if curTime in curSector['timeList']:
-            # We have already seen this time before!  Find the index that this time represents
-            curIX = len(curSector['timeList'])-1    #Assuming times never decrease
-            curSector['ACList'][curIX].append(callSignKey)
-        else:
-            # We haven't yet seen this time, so the lists are empty
-            curSector['timeList'].append(curTime)
-            curIX = len(curSector['timeList'])-1
-            # print 'timeList = {0}'.format(curSector['timeList'])
-            # print 'curIX = {0}'.format(curIX)
-            curSector['ACList'].append([callSignKey])
+            if curTime in curSector['timeList']:
+                # We have already seen this time before!  Find the index that this time represents
+                curIX = len(curSector['timeList'])-1    #Assuming times never decrease
+                curSector['ACList'][curIX].append(callSignKey)
+            else:
+                # We haven't yet seen this time, so the lists are empty
+                curSector['timeList'].append(curTime)
+                curIX = len(curSector['timeList'])-1
+                # print 'timeList = {0}'.format(curSector['timeList'])
+                # print 'curIX = {0}'.format(curIX)
+                curSector['ACList'].append([callSignKey])
 
     return aircraftDict, sectorDict
 
