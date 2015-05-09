@@ -70,7 +70,10 @@ def readCustomFacetFile(facetFileName, getSector = False):
         # If this is the first time we've seen this aircraft, initialize its dictionary entry
         if not aircraftDict.has_key(callSignKey):
             aircraftDict[callSignKey] = {'flightTime'   : -1,   'flightDistance'    : -1,
-                                         'fuelBurn'     : -1,   'isRerouted'        : set()}
+                                         'fuelBurn'     : -1,   'isRerouted'        : set(),
+                                         'acType'       : curLine['type'],
+                                         'lat'          : [],   'lon'               : [],
+                                         'firstTime'    : int(curLine['time'])}
 
         # Pull down the dictionary of the current aircraft (this might be pointer to dictionary?)
         curAC = aircraftDict[callSignKey]

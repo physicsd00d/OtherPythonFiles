@@ -60,11 +60,15 @@ deltaDistance   = []
 deltaFuel       = []
 # hackOffset      = -1   #Needed to convert from comparison to baseline.
 
+reroutedAcList_Base = []
+totalFuel = []
+
 for key in reroutedAcList:
 
     try:
         print "Trying {0}".format(key)
         baseline    = aircraftDictBaseline[key]
+        reroutedAcList_Base.append(key)
     except:
         # IDs are off.  In general not a consistent offset.  Find the closest ID.
         sign, id = key.split("_")
@@ -80,6 +84,8 @@ for key in reroutedAcList:
         baseKey = "{0}_{1}".format(sign,possibleIDs[closestIX])
         print "  FIXED {0}".format(baseKey)
         baseline    = aircraftDictBaseline[baseKey]
+        reroutedAcList_Base.append(baseKey)
+
 
 
     comparison  = aircraftDictComparison[key]
@@ -87,6 +93,8 @@ for key in reroutedAcList:
     deltaTime.append(comparison['flightTime'] - baseline['flightTime'])
     deltaDistance.append(comparison['flightDistance'] - baseline['flightDistance'])
     deltaFuel.append(comparison['fuelBurn'] - baseline['fuelBurn'])
+
+    totalFuel.append(baseline['fuelBurn'])
 
 aggregateDeltaTime      = sum(deltaTime)
 aggregateDeltaDistance  = sum(deltaDistance)
@@ -125,12 +133,39 @@ outFile.write(','.join([str(obj) for obj in outputVals]) + '\n\n')
 outFile.write("#rerouted\n")
 outFile.write(','.join(reroutedAcList) + '\n\n')
 
-outFile.write("#filtered\n")
+outFile.write("#filtered, {0}\n".format(len(aircraftFilterSet)))
 outFile.write(','.join(aircraftFilterSet) + '\n')
 outFile.write(','.join([str(obj) for obj in minutesInFilter]) + '\n')
 outFile.close()
 
 
+# curKey = 'AAL1366_20194'
+# aircraftDictComparison[curKey]
+# aircraftDictBaseline[curKey]
+#
+# zip(reroutedAcList, [(aircraftDictComparison[curKey]['fuelBurn'],aircraftDictComparison[curKey]['acType'])  for curKey in reroutedAcList])
+# zip(reroutedAcList_Base, [aircraftDictBaseline[curKey]['fuelBurn'] for curKey in reroutedAcList_Base])
+#
+#
+# totalNASFuel = []
+# totalNASTime = []
+# totalNASDist = []
+# for (curKey, curAC) in aircraftDictBaseline.iteritems():
+#     totalNASFuel.append(curAC['fuelBurn'])
+#     totalNASTime.append(curAC['flightTime'] - int(curAC['firstTime']))
+#     totalNASDist.append(curAC['flightDistance'])
+#
+#     if curAC['fuelBurn'] == 5.02:
+#         print curKey
+#
+#
+# import matplotlib.pyplot as plt
+# (n, bins, patches)  = plt.hist(totalNASFuel, bins=100, range=[0,100000])
+# plt.show()
+#
+# curKey = 'DAL1500_15763'
+# curAC = aircraftDictBaseline[curKey]
+# curAC['flightTime'] - int(curAC['firstTime'])
 
 
 

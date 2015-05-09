@@ -18,11 +18,12 @@ flightPlanFolder = 'InputFiles/'
 outputFolder = 'OutputFiles/'
 
 
-# flightPlanCsv = 'OUT_constrained_schedules_20120504_2018.csv'
+flightPlanCsv = 'OUT_constrained_schedules_20120504_2018.csv'
+TrxName = 'TRX_TAF_TEST'
 # TrxName = 'TRX_TAF2018'
 
-flightPlanCsv = 'OUT_constrained_schedules_20120504_2025.csv'
-TrxName = 'TRX_TAF2025'
+# flightPlanCsv = 'OUT_constrained_schedules_20120504_2025.csv'
+# TrxName = 'TRX_TAF2025'
 
 midnight = datetime(2012, 5, 4, 0, 1, 0)  # This gets used to throw out a few flights that are rolling over from the previous day
 
@@ -98,7 +99,6 @@ def CSVtoTRX(inFileName, outFileName):
             # Assemble the dictionary at this non-comment line
             for ix in range(numKeys):
                 flightPlan[dictKeys[ix]] = key[ix]
-            numAircraftTotal = numAircraftTotal +1
 
             if flightPlan['FLIGHT_PLAN_TYPE'] == 'VFR':
                 # Skip VFR for now, only do IFR
@@ -113,6 +113,8 @@ def CSVtoTRX(inFileName, outFileName):
             # if(flightPlan['ACID'] == 'DAL269'):
             #     return flightPlan
 
+
+            numAircraftTotal = numAircraftTotal +1
 
             # Figure out the proper departure time (not worrying about the specific date YET)
             departureTime   = convertTwoElementStringToDate(flightPlan['OUT_TIME'])
@@ -206,7 +208,7 @@ def CSVtoTRX(inFileName, outFileName):
 #
 #     print 'numInactive = ' + str(numInactive)
 #     print 'numActiveWithoutProfile = ' + str(numActiveWithoutProfile)
-#     print 'numAircraftTotal = ' + str(numAircraftTotal)
+    print 'numAircraftTotal = ' + str(numAircraftTotal)
 #
 #     # return trackTimeRecord
 #     return flightPlan
