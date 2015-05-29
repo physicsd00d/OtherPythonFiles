@@ -8,35 +8,44 @@ This script first takes a filter and uses it prune down a large TRX file so that
 
   Author: Thomas J Colvin
 '''
+#
+# import sys
+# import os.path
+#
+# print 'Number of arguments:', len(sys.argv), 'arguments.'
+# print 'Argument List:', str(sys.argv)
+#
+# if len(sys.argv) != 4:
+#     print "   Error: need exactly three arguments after file name"
+#     print "          fileToFilterOn fileToPrune outputFile"
+#     sys.exit()
+#
+# # Unpack inputs
+# fileToFilterOn  = sys.argv[1]
+# fileToPrune     = sys.argv[2]
+# outputFile      = sys.argv[3]
+#
+# # Check that inputs exist
+# if not os.path.isfile(fileToFilterOn):
+#     print "   Error: {0} does not exist".format(fileToFilterOn)
+#     sys.exit()
+# elif not os.path.isfile(fileToPrune):
+#     print "   Error: {0} does not exist".format(fileToPrune)
+#     sys.exit()
 
 import sys
-import os.path
-
-print 'Number of arguments:', len(sys.argv), 'arguments.'
-print 'Argument List:', str(sys.argv)
-
-if len(sys.argv) != 4:
-    print "   Error: need exactly three arguments after file name"
-    print "          fileToFilterOn fileToPrune outputFile"
-    sys.exit()
-
-# Unpack inputs
-fileToFilterOn  = sys.argv[1]
-fileToPrune     = sys.argv[2]
-outputFile      = sys.argv[3]
-
-# Check that inputs exist
-if not os.path.isfile(fileToFilterOn):
-    print "   Error: {0} does not exist".format(fileToFilterOn)
-    sys.exit()
-elif not os.path.isfile(fileToPrune):
-    print "   Error: {0} does not exist".format(fileToPrune)
-    sys.exit()
+print "ERROR: Do not use this function anymore.  It is an order of magnitude slower than the aiaaSpaceFilter\n"
+sys.exit()
 
 
 '''
 Okay, the inputs check out.  Now run the actual script.
 '''
+filterPath = "/Users/tcolvin1/Desktop/aiaaSpace/FilteredTRX/"
+rawPath    = "/Users/tcolvin1/Desktop/aiaaSpace/RawTRX/"
+
+fileToFilterOn = filterPath + "TRX_FrontRange450_TRX_DW2015013119201337.trx"
+fileToPrune    = rawPath + "TRX_DW2015013119201337.trx"
 
 from TRX_functions import readTRXIntoDictByCallsign
 from TRX_functions import pruneTRXFromList
@@ -49,7 +58,8 @@ from TRX_functions import pruneTRXFromList
 # fileToPrune     = 'Kevin2018/TRX_TAF_PlannedTestFull'
 # outputFile      = 'TempTRX'
 
-tempOutFileName = "OutputTRX/TempTRX"
+tempOutFileName = "TempTRX"   # This is good for debugging
+# tempOutFileName = outputFile  # This should be okay if everything is working...
 
 # Just load the entire TRX, since it's been filtered, it should be relatively small
 TRX_Storage = readTRXIntoDictByCallsign(fileToFilterOn)

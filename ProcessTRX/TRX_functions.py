@@ -33,7 +33,8 @@ def readTRXIntoDictByCallsign(inFileName):
     # Starts by eliminating every single aircraft (shouldPrint = False), but if an AC matches a filter,
     #   then it will be allowed through.
 
-    print 'readTRXIntoDictByCallsign for ' + str(inFileName)
+    #print 'readTRXIntoDictByCallsign for ' + str(inFileName)
+
     # # Unpack the filters and determine if they're active or not
     # callsigns           = set(filterDict['callsigns'])
     # filterCallsigns     = len(callsigns) > 0
@@ -169,139 +170,142 @@ def readTRXIntoDictByCallsign(inFileName):
     return TRX_Storage
 
 
-'''
-Take a list of CallSigns and remove every track update that does come from an AC with that callsign
-'''
-def pruneTRXFromList(inFileName, filterDict, outFileName, deltaSeconds = 0):
-    # Starts by eliminating every single aircraft (shouldPrint = False), but if an AC matches a filter,
-    #   then it will be allowed through.
-
-    print 'Pruning for ' + str(outFileName)
-    # Unpack the filters and determine if they're active or not
-    callsigns           = set(filterDict['callsigns'])
-    filterCallsigns     = len(callsigns) > 0
-
-    sectorNames         = filterDict['sectorNames']
-    filterSectorNames   = len(sectorNames) > 0
-
-    filterDepAirports   = filterDict['filterDepAirports']
-    filterTimes         = filterDict['filterTimes']
-
-    bigFilterKeys       = filterDict['bigFilterKeys']
-
-    # filterDict = {'callsigns' : flightsToKeep, 'sectorNames' : [], 'filterDepAirports' : filterDepAirports,
-              # 'filterTimes' : filterTimes, 'bigFilterKeys' : bigFilterKeys}
-
-    # # departureAirports needs to match one-to-one with callsigns.  Check that
-    # if filterDepartures and (len(filterDict['callsigns']) != len(departureAirports)):
-    #     print 'ERROR: len(callsigns) != len(departureAirports)'
-    #     print (len(callsigns) != len(departureAirports))
-    #     print filterDepartures
-    #     print len(callsigns)
-    #     print len(departureAirports)
-    #     raise RuntimeError
-
-    # Keys are TRACK_TIMES, each value will be the strings (concatenated together) that are to be printed out
-    TRX_Storage = dict()
-
-    printOkay = True
-    if len(outFileName) == 0:
-        printOkay = False
-
-    try:
-        inputFile = open(inFileName, 'r')
-
-        # This will hold the information as we run through the lines until it's time to save it to the dictionary
-        curTime = -1
-        curFPLine = ''
-        curTrackLine = ''
-        shouldPrint = False
-        curCallSign = []    # Scope this here
-
-        for line in inputFile:
-            key = line.split()
-
-            if len(key) > 0:
-                if key[0] == 'TRACK_TIME':
-                    # Indicates progress
-                    curTime = str(int(key[1]) + deltaSeconds)
-
-                elif key[0] == 'TRACK':
-                    curCallSign = key[1]
-                    if filterCallsigns:
-                        shouldPrint = (curCallSign in callsigns)    #Sets it true
-
-                    if filterSectorNames:
-                        shouldPrint = shouldPrint or (key[8] in set(sectorNames))   # Another chance to be true
-
-                    # modifiedSign = key[1] + '_' + suffixList[fileCounter]
-                    # if (key[1] == 'EJM626'):
-                    #     print 'DEBUG {0}, shouldPrint {1}'.format(key[1], shouldPrint)
-
-                    curTrackLine = line
-
-                elif key[0] == 'FP_ROUTE':
-                    curFPLine = line
-
-                    # At this point we need to check for the departure Airport
-                    if shouldPrint:
-                        # This means that the callsign is present, but not necessarily the other possible filters
-                        if filterDepAirports and filterTimes:
-                            # This means we're filtering based on departures, so make sure...
-                            depAirport = key[1].split('.')[0]
-                            filterKey = '{0}_{1}_{2}'.format(curCallSign, depAirport, curTime)
-                            if filterKey not in bigFilterKeys:
-                                shouldPrint = False
-                        elif not (filterDepAirports and filterTimes):
-                            #Do Nothing
-                            None
-                        else:
-                            print 'You shoudl not have wound up here.  Handle this case if you want to proceed.'
-                            raise RuntimeError
-
-                    # At this point, we will be done with the specific aircraf that we're looking at so save it if it's good
-                    if shouldPrint:
-                        # Create this time record if necessary
-                        if not TRX_Storage.has_key(curTime):
-                            TRX_Storage[curTime] = ''
-
-                        # Add it to the queue for printing
-                        TRX_Storage[curTime] = TRX_Storage[curTime] + curTrackLine
-                        TRX_Storage[curTime] = TRX_Storage[curTime] + curFPLine + '\n'
-
-                        # Reset
-                        shouldPrint = False
-
-                elif key[0][0] == '#':
-                    # print 'COMMENT'
-                    1
-
-                else:
-                    print "pruneTRXFromList: NewLine! This should not have been hit!"
-                    print key
-
-        inputFile.close() # It's likely that the output file will be the same file, so make sure to close this first.
-
-    except:
-        print "pruneTRXFromList: FAILURE in reading the file"
-        printOkay = 0
-        raise
-
-
-    if printOkay:
-        # # Now write everything to file
-        # try:
-        outFile = open(outFileName,'w')
-
-        for key in sorted(TRX_Storage.iterkeys()):
-            if len(TRX_Storage[key]) > 0:
-                outFile.write('TRACK_TIME ' + key + '\n')
-                outFile.write(TRX_Storage[key])
-
-        outFile.close()
-        # except:
-        #     print "FAIL
-    return TRX_Storage
+# '''
+# Take a list of CallSigns and remove every track update that does come from an AC with that callsign
+# '''
+# def pruneTRXFromList(inFileName, filterDict, outFileName, deltaSeconds = 0):
+#     # Starts by eliminating every single aircraft (shouldPrint = False), but if an AC matches a filter,
+#     #   then it will be allowed through.
+#
+#     print "WARNING!!!  This function is terribly slow.  Check the aiaaSpaceFilter instead.  Uncomment sys.exit otherwise"
+#     sys.exit()
+#
+#     print 'Pruning for ' + str(outFileName)
+#     # Unpack the filters and determine if they're active or not
+#     callsigns           = set(filterDict['callsigns'])
+#     filterCallsigns     = len(callsigns) > 0
+#
+#     sectorNames         = filterDict['sectorNames']
+#     filterSectorNames   = len(sectorNames) > 0
+#
+#     filterDepAirports   = filterDict['filterDepAirports']
+#     filterTimes         = filterDict['filterTimes']
+#
+#     bigFilterKeys       = filterDict['bigFilterKeys']
+#
+#     # filterDict = {'callsigns' : flightsToKeep, 'sectorNames' : [], 'filterDepAirports' : filterDepAirports,
+#               # 'filterTimes' : filterTimes, 'bigFilterKeys' : bigFilterKeys}
+#
+#     # # departureAirports needs to match one-to-one with callsigns.  Check that
+#     # if filterDepartures and (len(filterDict['callsigns']) != len(departureAirports)):
+#     #     print 'ERROR: len(callsigns) != len(departureAirports)'
+#     #     print (len(callsigns) != len(departureAirports))
+#     #     print filterDepartures
+#     #     print len(callsigns)
+#     #     print len(departureAirports)
+#     #     raise RuntimeError
+#
+#     # Keys are TRACK_TIMES, each value will be the strings (concatenated together) that are to be printed out
+#     TRX_Storage = dict()
+#
+#     printOkay = True
+#     if len(outFileName) == 0:
+#         printOkay = False
+#
+#     try:
+#         inputFile = open(inFileName, 'r')
+#
+#         # This will hold the information as we run through the lines until it's time to save it to the dictionary
+#         curTime = -1
+#         curFPLine = ''
+#         curTrackLine = ''
+#         shouldPrint = False
+#         curCallSign = []    # Scope this here
+#
+#         for line in inputFile:
+#             key = line.split()
+#
+#             if len(key) > 0:
+#                 if key[0] == 'TRACK_TIME':
+#                     # Indicates progress
+#                     curTime = str(int(key[1]) + deltaSeconds)
+#
+#                 elif key[0] == 'TRACK':
+#                     curCallSign = key[1]
+#                     if filterCallsigns:
+#                         shouldPrint = (curCallSign in callsigns)    #Sets it true
+#
+#                     if filterSectorNames:
+#                         shouldPrint = shouldPrint or (key[8] in set(sectorNames))   # Another chance to be true
+#
+#                     # modifiedSign = key[1] + '_' + suffixList[fileCounter]
+#                     # if (key[1] == 'EJM626'):
+#                     #     print 'DEBUG {0}, shouldPrint {1}'.format(key[1], shouldPrint)
+#
+#                     curTrackLine = line
+#
+#                 elif key[0] == 'FP_ROUTE':
+#                     curFPLine = line
+#
+#                     # At this point we need to check for the departure Airport
+#                     if shouldPrint:
+#                         # This means that the callsign is present, but not necessarily the other possible filters
+#                         if filterDepAirports and filterTimes:
+#                             # This means we're filtering based on departures, so make sure...
+#                             depAirport = key[1].split('.')[0]
+#                             filterKey = '{0}_{1}_{2}'.format(curCallSign, depAirport, curTime)
+#                             if filterKey not in bigFilterKeys:
+#                                 shouldPrint = False
+#                         elif not (filterDepAirports and filterTimes):
+#                             #Do Nothing
+#                             None
+#                         else:
+#                             print 'You shoudl not have wound up here.  Handle this case if you want to proceed.'
+#                             raise RuntimeError
+#
+#                     # At this point, we will be done with the specific aircraf that we're looking at so save it if it's good
+#                     if shouldPrint:
+#                         # Create this time record if necessary
+#                         if not TRX_Storage.has_key(curTime):
+#                             TRX_Storage[curTime] = ''
+#
+#                         # Add it to the queue for printing
+#                         TRX_Storage[curTime] = TRX_Storage[curTime] + curTrackLine
+#                         TRX_Storage[curTime] = TRX_Storage[curTime] + curFPLine + '\n'
+#
+#                         # Reset
+#                         shouldPrint = False
+#
+#                 elif key[0][0] == '#':
+#                     # print 'COMMENT'
+#                     1
+#
+#                 else:
+#                     print "pruneTRXFromList: NewLine! This should not have been hit!"
+#                     print key
+#
+#         inputFile.close() # It's likely that the output file will be the same file, so make sure to close this first.
+#
+#     except:
+#         print "pruneTRXFromList: FAILURE in reading the file"
+#         printOkay = 0
+#         raise
+#
+#
+#     if printOkay:
+#         # # Now write everything to file
+#         # try:
+#         outFile = open(outFileName,'w')
+#
+#         for key in sorted(TRX_Storage.iterkeys()):
+#             if len(TRX_Storage[key]) > 0:
+#                 outFile.write('TRACK_TIME ' + key + '\n')
+#                 outFile.write(TRX_Storage[key])
+#
+#         outFile.close()
+#         # except:
+#         #     print "FAIL
+#     return TRX_Storage
 
 
 

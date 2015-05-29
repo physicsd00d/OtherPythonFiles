@@ -4,6 +4,8 @@
 # I suspect these do not belong here
 .idea/**
 **/.DS_STORE
+**/.DS_Store
+.DS_Store
 
 # It's probably insecure to use gitignore for these, but i will do it for now
 #  because I'm lazy and there are no collaborators to mess this up
