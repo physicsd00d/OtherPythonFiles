@@ -9,8 +9,12 @@
 
 # It's probably insecure to use gitignore for these, but i will do it for now
 #  because I'm lazy and there are no collaborators to mess this up
-ProcessTAF/InputFiles/**
-ProcessTAF/OutputFiles/**
+# ProcessTAF/InputFiles/**
+# ProcessTAF/OutputFiles/**
+
+**/InputFiles/**
+**/OutputFiles/**
+
 
 ProcessTRX/Filters/**
 ProcessTRX/InputTRX/**

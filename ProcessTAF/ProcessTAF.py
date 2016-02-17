@@ -19,7 +19,12 @@ outputFolder = 'OutputFiles/'
 
 
 flightPlanCsv = 'OUT_constrained_schedules_20120504_2018.csv'
-TrxName = 'TRX_TAF_TEST'
+TrxName = 'TRX_TAF_TEST2018'
+
+# flightPlanCsv = 'OUT_constrained_schedules_20120504_2025.csv'
+# TrxName = 'TRX_TAF_TEST2025'
+
+
 # TrxName = 'TRX_TAF2018'
 
 # flightPlanCsv = 'OUT_constrained_schedules_20120504_2025.csv'
@@ -112,13 +117,16 @@ def CSVtoTRX(inFileName, outFileName):
             # ### DEBUGGING
             # if(flightPlan['ACID'] == 'DAL269'):
             #     return flightPlan
-
+            # if(flightPlan['ACID'] == 'UPS352'):
+            #     return flightPlan
+            #     break
 
             numAircraftTotal = numAircraftTotal +1
 
             # Figure out the proper departure time (not worrying about the specific date YET)
-            departureTime   = convertTwoElementStringToDate(flightPlan['OUT_TIME'])
-            arrivalTime     = convertTwoElementStringToDate(flightPlan['IN_TIME'])
+            # departureTime   = convertTwoElementStringToDate(flightPlan['OUT_TIME'])  # I believe this is the time it REALLY took off
+            departureTime   = convertTwoElementStringToDate(flightPlan['OFF_TIME'])    # AirTop uses this, the FILED time.
+            # arrivalTime     = convertTwoElementStringToDate(flightPlan['IN_TIME'])
 
 #             if (departureTime < minDepartureTime):
 #                 minDepartureTime = departureTime
