@@ -4,7 +4,6 @@ Read in all the custom FACET output files and save them as pickles for fast subs
 "Filter" files must end in .flt
 The file name convention is ###_anythingYouWant.cst, ###_anythingYouWant.flt
 The numbers (or text) that precede the first underscore will become the name of the pickle ###.pkl
-pickles are placed in same folder as the script was called from.
 '''
 
 ''' This gets the function arguments '''
